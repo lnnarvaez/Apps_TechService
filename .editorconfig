@@ -1,0 +1,252 @@
+# EditorConfig - TechService
+# C# + .NET 8 + Windows Forms
+#
+# Ubicación recomendada: /.editorconfig
+# Complementa: /.github/copilot-instructions.md
+
+root = true
+
+# ============================================================================
+# CONFIGURACIÓN GENERAL
+# ============================================================================
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# ============================================================================
+# C#
+# ============================================================================
+
+[*.cs]
+
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+# Usings
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+# Uso de var: usarlo cuando el tipo sea evidente.
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = false:suggestion
+
+# Inicialización y simplificación
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_prefer_auto_properties = true:suggestion
+
+csharp_style_prefer_simple_default_expression = true:suggestion
+csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_prefer_pattern_matching = true:suggestion
+csharp_style_prefer_not_pattern = true:suggestion
+csharp_style_prefer_tuple_swap = true:suggestion
+
+# Null safety y expresiones
+csharp_style_conditional_delegate_call = true:suggestion
+csharp_style_null_propagation = true:suggestion
+csharp_style_coalesce_expression = true:suggestion
+csharp_style_prefer_null_check_over_reference_equality_method = true:suggestion
+
+# Accesibilidad y modificadores
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
+dotnet_style_readonly_field = true:suggestion
+dotnet_style_readonly_struct = true:suggestion
+csharp_prefer_static_local_function = true:suggestion
+
+# Llaves y estructura
+csharp_prefer_braces = true:warning
+csharp_indent_braces = false
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+
+# Espaciado
+csharp_space_after_cast = false
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+csharp_space_between_method_call_parameter_list_parentheses = false
+csharp_space_between_parentheses = false
+csharp_space_before_colon_in_inheritance_clause = true
+csharp_space_after_colon_in_inheritance_clause = true
+
+# ============================================================================
+# NOMENCLATURA C#
+# ============================================================================
+
+# Tipos
+dotnet_naming_symbols.types.applicable_kinds = class, struct, enum, delegate, record
+dotnet_naming_symbols.types.applicable_accessibilities = *
+
+# Interfaces
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_symbols.interfaces.applicable_accessibilities = *
+
+# Métodos
+dotnet_naming_symbols.methods.applicable_kinds = method
+dotnet_naming_symbols.methods.applicable_accessibilities = *
+
+# Propiedades
+dotnet_naming_symbols.properties.applicable_kinds = property
+dotnet_naming_symbols.properties.applicable_accessibilities = *
+
+# Eventos
+dotnet_naming_symbols.events.applicable_kinds = event
+dotnet_naming_symbols.events.applicable_accessibilities = *
+
+# Parámetros
+dotnet_naming_symbols.parameters.applicable_kinds = parameter
+dotnet_naming_symbols.parameters.applicable_accessibilities = *
+
+# Variables locales
+dotnet_naming_symbols.local_variables.applicable_kinds = local
+dotnet_naming_symbols.local_variables.applicable_accessibilities = *
+
+# Campos privados
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+# Constantes
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.applicable_accessibilities = *
+dotnet_naming_symbols.constants.required_modifiers = const
+
+# Estilos
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_style.camel_case.capitalization = camel_case
+
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+
+dotnet_naming_style.i_pascal_case.required_prefix = I
+dotnet_naming_style.i_pascal_case.capitalization = pascal_case
+
+# Reglas
+
+# Clases, structs, enums, delegates y records
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.types_should_be_pascal_case.severity = warning
+
+# Interfaces
+dotnet_naming_rule.interfaces_should_be_i_pascal_case.symbols = interfaces
+dotnet_naming_rule.interfaces_should_be_i_pascal_case.style = i_pascal_case
+dotnet_naming_rule.interfaces_should_be_i_pascal_case.severity = warning
+
+# Métodos
+dotnet_naming_rule.methods_should_be_pascal_case.symbols = methods
+dotnet_naming_rule.methods_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.methods_should_be_pascal_case.severity = warning
+
+# Propiedades
+dotnet_naming_rule.properties_should_be_pascal_case.symbols = properties
+dotnet_naming_rule.properties_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.properties_should_be_pascal_case.severity = warning
+
+# Eventos
+dotnet_naming_rule.events_should_be_pascal_case.symbols = events
+dotnet_naming_rule.events_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.events_should_be_pascal_case.severity = warning
+
+# Parámetros
+dotnet_naming_rule.parameters_should_be_camel_case.symbols = parameters
+dotnet_naming_rule.parameters_should_be_camel_case.style = camel_case
+dotnet_naming_rule.parameters_should_be_camel_case.severity = warning
+
+# Variables locales
+dotnet_naming_rule.local_variables_should_be_camel_case.symbols = local_variables
+dotnet_naming_rule.local_variables_should_be_camel_case.style = camel_case
+dotnet_naming_rule.local_variables_should_be_camel_case.severity = suggestion
+
+# Campos privados
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.style = underscore_camel_case
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.severity = warning
+
+# Constantes
+dotnet_naming_rule.constants_should_be_pascal_case.symbols = constants
+dotnet_naming_rule.constants_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.constants_should_be_pascal_case.severity = warning
+
+# ============================================================================
+# ANALIZADORES Y CALIDAD
+# ============================================================================
+
+# Nomenclatura
+dotnet_diagnostic.IDE1006.severity = warning
+
+# Código no utilizado
+dotnet_diagnostic.IDE0051.severity = warning
+
+# Usings innecesarios
+dotnet_diagnostic.IDE0005.severity = warning
+
+# Accesibilidad explícita
+dotnet_diagnostic.IDE0040.severity = suggestion
+
+# Campos readonly
+dotnet_diagnostic.IDE0044.severity = suggestion
+
+# Auto-propiedades
+dotnet_diagnostic.IDE0032.severity = suggestion
+
+# Inicializadores y simplificaciones
+dotnet_diagnostic.IDE0017.severity = suggestion
+dotnet_diagnostic.IDE0028.severity = suggestion
+dotnet_diagnostic.IDE0029.severity = suggestion
+dotnet_diagnostic.IDE0030.severity = suggestion
+dotnet_diagnostic.IDE0031.severity = suggestion
+
+# nameof
+dotnet_diagnostic.IDE0082.severity = suggestion
+
+# Evitar campos públicos
+dotnet_diagnostic.CA1051.severity = warning
+
+# No lanzar tipos de excepción reservados
+dotnet_diagnostic.CA2201.severity = warning
+
+# No ignorar tareas async
+dotnet_diagnostic.CS4014.severity = warning
+
+# ============================================================================
+# WINDOWS FORMS - CÓDIGO GENERADO POR EL DISEÑADOR
+# ============================================================================
+
+[*.Designer.cs]
+
+indent_style = space
+indent_size = 4
+
+# Mantener silenciosas sugerencias sobre código generado.
+dotnet_diagnostic.IDE0005.severity = silent
+dotnet_diagnostic.IDE0001.severity = silent
+dotnet_diagnostic.IDE0028.severity = silent
+dotnet_diagnostic.IDE0051.severity = silent
+dotnet_diagnostic.IDE1006.severity = silent
+
+# ============================================================================
+# ARCHIVOS DE PROYECTO Y CONFIGURACIÓN
+# ============================================================================
+
+[*.{csproj,props,targets,config,json,xml}]
+
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# MARKDOWN
+# ============================================================================
+
+[*.md]
+
+trim_trailing_whitespace = true
+insert_final_newline = true
