@@ -4,7 +4,10 @@ namespace Apps_TechService.Models.Entities
 {
     public class PreventiveMaintenance : MaintenanceTask
     {
-        //public string ChecklistProtocol { get; private set; }
+        //Rutinas de protocolos de limpieza: Limpieza de ventiladores, cambio de pasta térmica y optimización",
+        //Optimización de sistema operativo y limpieza de archivos" o "Revisión de hardware, limpieza
+        //y verificación de servicios"
+        public string ChecklistProtocol { get; private set; } 
         public decimal ConsumablesCost { get; private set; }
 
         public PreventiveMaintenance(
@@ -16,12 +19,15 @@ namespace Apps_TechService.Models.Entities
             decimal consumablesCost = 0.0m)
             : base(maintenanceId, serviceCode, technicianId, MaintenanceType.Preventive, laborCost)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(checklistProtocol, nameof(checklistProtocol));
+            checklistProtocol = ValidateRequiredValue(checklistProtocol, nameof(checklistProtocol));
 
             if (consumablesCost < 0)
-                throw new ArgumentOutOfRangeException(nameof(consumablesCost), "El costo de insumos no puede ser negativo.");
-
-            //ChecklistProtocol = checklistProtocol.Trim();
+            {
+                throw new ArgumentOutOfRangeException(nameof(consumablesCost),
+                    "El costo de insumos no puede ser negativo.");
+            }
+            
+            ChecklistProtocol = checklistProtocol.Trim();
             ConsumablesCost = consumablesCost;
         }
 
@@ -34,10 +40,8 @@ namespace Apps_TechService.Models.Entities
 
         public void FinalizePreventive(string? observations = null)
         {
-            //MarkCompleted (observations);
+            MarkCompleted (observations);
             //Observations = observations;
         }
-
-
     } //End class
 } // End namespace

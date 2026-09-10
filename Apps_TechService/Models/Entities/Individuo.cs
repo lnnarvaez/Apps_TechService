@@ -9,9 +9,9 @@ namespace Apps_TechService.Models.Entities
 
         public string LastName { get; private set; }
 
-        public string? Phone { get; private set; }
+        public string? Phone { get; set; }
 
-        public string? Email { get; private set; }
+        public string? Email { get; set; }
 
         public bool IsActive { get; private set; }
 
