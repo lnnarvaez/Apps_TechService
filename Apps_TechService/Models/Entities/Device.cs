@@ -1,62 +1,59 @@
-﻿namespace Apps_TechService.Models.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Apps_TechService.Models.Entities
 {
-    /// <summary>
-    /// Representa el equipo o dispositivo electrónico entregado por un cliente.
-    /// </summary>
-
-    /* 
-     * Regla de construcción: Un equipo no puede registrarse en el sistema sin saber a qué 
-     * cliente pertenece, qué tipo de equipo es, su número de serie/código y la falla 
-     * reportada por el cliente al momento de ingresarl.
-     * 
-     * Inicialización automática: La fecha de registro la determina el sistema 
-     * en tiempo de creación.
-     */
-
     public class Device
     {
-        // Equipo
+        #region Properties
         public string DeviceCode { get; private set; }
         public string CustomerId { get; private set; }
         public string Type { get; private set; }
-        public string Brand { get; private set; }
+        public string Brand { get; private set; } 
         public string Model { get; private set; }
         public string SerialNumber { get; private set; }
         public string ReportedProblem { get; private set; }
-        public DateTime RegistrationDate { get; private set; }
+        public DateOnly RegistrationDate {  get; private set; }
 
-        public Device(
+        #endregion Properties
+
+        #region Constructors
+        Device () 
+        { 
+            //Constructor por default
+        }
+
+        public Device (
             string deviceCode,
-            string customerId,
+            string custoomerId,
             string type,
             string brand,
-            string model,
-            string serialNumber,
-            string reportedProblem)
+            string reportedProblem
+            )
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(deviceCode, nameof(deviceCode));
-            ArgumentException.ThrowIfNullOrWhiteSpace(customerId, nameof(customerId));
-            ArgumentException.ThrowIfNullOrWhiteSpace(brand, nameof(brand));
-            ArgumentException.ThrowIfNullOrWhiteSpace(model, nameof(model));
-            ArgumentException.ThrowIfNullOrWhiteSpace(serialNumber, nameof(serialNumber));
-            ArgumentException.ThrowIfNullOrWhiteSpace(reportedProblem, nameof(reportedProblem));
+            ArgumentException.ThrowIfNullOrWhiteSpace ( deviceCode, nameof (deviceCode));
+            ArgumentException.ThrowIfNullOrWhiteSpace (custoomerId, nameof (custoomerId));
+            ArgumentException.ThrowIfNullOrWhiteSpace (brand, nameof (brand));
+            ArgumentException.ThrowIfNullOrWhiteSpace(reportedProblem, nameof (brand));
 
-            DeviceCode = deviceCode.Trim();
-            CustomerId = customerId.Trim();
+            DeviceCode = deviceCode;
+            CustomerId = custoomerId;
             Type = type;
-            Brand = brand.Trim();
-            Model = model.Trim();
-            SerialNumber = serialNumber.Trim();
-            ReportedProblem = reportedProblem.Trim();
-
-            RegistrationDate = DateTime.UtcNow; // Condición inicial del sistema
+            Brand = brand;
+            ReportedProblem = reportedProblem;
         }
+        #endregion 
 
-        public void UpdateReportedProblem(string updatedProblem)
+        public void UpdateReportedProblem (string updatedProblem)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(updatedProblem, nameof(updatedProblem));
-            ReportedProblem = updatedProblem.Trim();
-        }
+            ArgumentException.ThrowIfNullOrWhiteSpace (@updatedProblem, nameof (@updatedProblem));
+            ReportedProblem = updatedProblem; // Asignar el reporte del problema.
+        } //end Methods
 
-    }//end class Equipment
+
+    }//end class
 } //end namespace

@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Apps_TechService.Models.Enums
 {
     public enum ServiceStatus
@@ -13,6 +7,6 @@ namespace Apps_TechService.Models.Enums
         InProgress = 3,
         Completed = 4,
         Delivered = 5,
-        Cancelled = 6
-    }
+        Canceled = 6
+    }//end class
 } //end namespace

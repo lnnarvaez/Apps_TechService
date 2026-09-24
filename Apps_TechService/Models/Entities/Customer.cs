@@ -1,42 +1,59 @@
-﻿namespace Apps_TechService.Models.Entities
+namespace Apps_TechService.Models.Entities
 {
-    /// <summary>
-    /// Representa al cliente propietario de los equipos.
-    /// </summary>
-    public class Customer
+    public class Customer : Individuo
     {
-        public string IdentificationNumber { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string? Phone { get; private set; }
-        public string? Email { get; private set; }
-        public string? Address { get; private set; }
-        public bool IsActive { get; private set; }
-
-        public string FullName => $"{FirstName} {LastName}".Trim();
-
-        // Constructor que exige solo las condiciones mínimas indispensables
-        public Customer(string identificationNumber, string firstName, string lastName)
+        #region Properties
+        public string? Address
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(identificationNumber, nameof(identificationNumber));
-            ArgumentException.ThrowIfNullOrWhiteSpace(firstName, nameof(firstName));
-            ArgumentException.ThrowIfNullOrWhiteSpace(lastName, nameof(lastName));
-
-            IdentificationNumber = identificationNumber.Trim();
-            FirstName = firstName.Trim();
-            LastName = lastName.Trim();
-            IsActive = true;
+            get
+            {
+                return Address;
+            }
+            set
+            {
+                Address = NormalizeAddress(value);
+            }
         }
 
-        // Métodos de negocio para alterar el estado con validaciones
-        public void UpdateContactInfo(string? phone, string? email, string? address)
+        #endregion Properties
+
+        #region Constructors
+        public Customer(
+        string nationalId,
+        string firstName,
+        string lastName,
+        string? address = null)
+        : base(
+                nationalId,
+                firstName,
+                lastName)
         {
-            Phone = phone?.Trim();
-            Email = email?.Trim();
-            Address = address?.Trim();
+            Address = NormalizeAddress(address);
         }
 
-        public void Deactivate() => IsActive = false;
-        public void Activate() => IsActive = true;
-    }//end-class
-}//end namespace
+        /// <summary>
+        /// Inicialización de nuevas instancias como una instancia nula
+        /// </summary>
+        protected Customer()
+        {
+            // Constructor por default
+            Address = null;
+        }
+        
+        #endregion Constructors
+
+        
+        /* public override string GetProfile ()
+        {
+            return $"Customer: {FullName} (ID: {NationalID})";
+        }*/
+
+        private static string? NormalizeAddress(string? address)
+        {
+            return string.IsNullOrWhiteSpace(address)
+                ? null
+                : address.Trim();
+        }
+        
+    } // End of class Customer
+} // End of namespace
