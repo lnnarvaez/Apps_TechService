@@ -31,12 +31,13 @@ namespace Apps_TechService.Models.Entities
             ConsumablesCost = consumablesCost;
         }
 
-        //public override decimal CalculateTotalCost() => LaborCost + ConsumablesCost;
+        public override decimal CalculateTotalCost() => LaborCost + ConsumablesCost;
 
-        public decimal CalculateTotalCost()
+        /*public decimal CalculateTotalCost()
         {
             return LaborCost + ConsumablesCost;
         }
+        */
 
         public void FinalizePreventive(string? observations = null)
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +26,6 @@ namespace Apps_TechService.Models.Entities
         }
 
         public string GetProfileSummary() 
-            => $"Customer: {FullName} (ID: {IdentificationNumber})";
+            => $"Customer: {FullName} {LastName}";
     }
 }

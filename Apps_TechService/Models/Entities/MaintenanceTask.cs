@@ -2,7 +2,7 @@ using Apps_TechService.Models.Enums;
 
 namespace Apps_TechService.Models.Entities
 {
-    public class MaintenanceTask
+    public abstract class MaintenanceTask
     {
         #region Properties
         public string MaintenanceId { get; private set; }
@@ -50,20 +50,24 @@ namespace Apps_TechService.Models.Entities
             StartDate = DateOnly.FromDateTime(DateTime.UtcNow);
         }
 
-        //public abstract decimal CalculateTotalCost();
+        public abstract decimal CalculateTotalCost();
         // Método polimórfico para calcular el costo total
-        public decimal CalculateTotalCost()
+        /*public decimal CalculateTotalCost()
         {
             return LaborCost;
-        }
+        }*/
 
-        private static string ValidateRequiredValue(
+        /// <summary>
+        /// Valida que un valor requerido no sea nulo ni vacío.
+        /// </summary>
+        /// <param name="value">El valor a validar.</param>
+        /// <param name="parameterName">El nombre del parámetro.</param>
+        /// <returns>El valor validado.</returns>
+        protected static string ValidateRequiredValue(
             string value,
             string parameterName)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(
-                value,
-                parameterName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(value, parameterName);
             return value;
         }
 

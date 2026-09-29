@@ -119,13 +119,14 @@ Models/Entities
 Ejemplos posibles:
 
 ```text
-Models/Entities/Cliente.cs
-Models/Entities/Equipo.cs
-Models/Entities/Servicio.cs
-Models/Entities/Mantenimiento.cs
-Models/Entities/Usuario.cs
-Models/Entities/RecepcionEquipo.cs
-Models/Entities/EntregaEquipo.cs
+Models/Entities/Customer.cs
+Models/Entities/Device.cs
+Models/Entities/Service.cs
+Models/Entities/MaintenanceTask.cs
+Models/Entities/Individual.cs
+Models/Entities/Technician.cs
+Models/Entities/PreventiveMaintenance.cs
+Models/Entities/CorrectiveMaintenance.cs
 ```
 
 No crear entidades del dominio dentro de `UI`.
@@ -143,9 +144,9 @@ Models/Enums
 Ejemplos posibles:
 
 ```text
-Models/Enums/EstadoServicio.cs
-Models/Enums/TipoMantenimiento.cs
-Models/Enums/EstadoEquipo.cs
+Models/Enums/ServiceStatus.cs
+Models/Enums/MaintenanceType.cs
+Models/Enums/UserRole.cs
 ```
 
 No declarar enumeraciones de dominio dentro de formularios si deben reutilizarse en otras partes de la aplicación.
@@ -309,7 +310,6 @@ Proceso();
 Ejecutar1();
 Metodo();
 ```
-
 ---
 
 ## Propiedades públicas
@@ -389,6 +389,7 @@ Los identificadores deben:
 - Evitar nombres de una sola letra, excepto contadores simples.
 - Evitar nombres genéricos como `Data`, `Info`, `Manager`, `Helper` o `Utils` cuando no describen una responsabilidad concreta.
 - Evitar palabras reservadas.
+- Establecer los nombres en inglés.
 - No utilizar prefijos húngaros.
 
 Priorizar claridad sobre brevedad.

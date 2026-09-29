@@ -1,4 +1,4 @@
-﻿using Apps_TechService.Models.Enums;
+using Apps_TechService.Models.Enums;
 /// <summary>
 /// Representa la orden de servicio principal solicitada por el cliente.
 /// </summary>
@@ -102,7 +102,7 @@ namespace Apps_TechService.Models.Entities
             if (Status == ServiceStatus.Delivered)
                 throw new InvalidOperationException("No se puede cancelar un servicio que ya fue entregado.");
 
-            Status = ServiceStatus.Cancelled;
+            Status = ServiceStatus.Canceled;
         }
 
     } //End class   

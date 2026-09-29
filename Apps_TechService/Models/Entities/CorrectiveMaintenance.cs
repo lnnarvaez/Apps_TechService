@@ -40,7 +40,7 @@ namespace Apps_TechService.Models.Entities
 
        // public override decimal CalculateTotalCost() => LaborCost + ReplacementPartsCost;
 
-        public decimal CalculateTotalCost()
+        public override decimal CalculateTotalCost()
         {
             decimal totalCost = LaborCost + ReplacementPartsCost;
             return totalCost;
