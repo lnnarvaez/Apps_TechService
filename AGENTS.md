@@ -1,62 +1,41 @@
-# AGENTS.md
+# Instrucciones del repositorio
 
-Aplicación de escritorio **Windows Forms (.NET 8, C#)**. Proyecto pequeño, sin
-tests automatizados ni CI configurados todavía.
+## Proyecto y comandos
 
-## Comandos
+- Es una aplicación Windows Forms para Windows, escrita en C# sobre .NET 8.
+- La solución contiene un único proyecto: `Apps_TechService/Apps_TechService.csproj`.
+- El punto de entrada es `Apps_TechService/Program.cs`; inicia `MainContainerForm`.
+- Ejecuta desde la raíz: `dotnet build Apps_TechService.slnx` y `dotnet run --project Apps_TechService/Apps_TechService.csproj`.
+- No hay tests, linter, formatter ni CI configurados; `dotnet build` es la verificación disponible.
+- No edites ni referencies `bin/`, `obj/` o `.vs/`; son artefactos generados.
 
-```powershell
-dotnet build Apps_TechService.slnx      # compilar
-dotnet run --project Apps_TechService/Apps_TechService.csproj  # ejecutar (requiere Windows)
-```
+## Estructura y flujo
 
-No hay proyecto de pruebas, ni linter/formatter separado, ni pipelines en
-`.github/` más allá del archivo de instrucciones. `dotnet build` es la única
-verificación disponible: compílalo antes de dar por terminado un cambio.
+- `UI/` contiene los formularios actuales; `View/` conserva el formulario legado `Form1`.
+- `Models/Entities/` contiene entidades existentes y `Models/Enums/` contiene enums reutilizables.
+- `Models/Customers/` contiene los contratos de entrada y salida usados por clientes.
+- `Database/PostgresConnection.cs` abre conexiones manuales con Npgsql; `Data/Repositories/` ejecuta SQL parametrizado y `Services/` concentra validaciones y reglas de negocio.
+- `MainContainerForm` carga `NewCustomerForm` dentro de `splitContainer1.Panel2` al pulsar `mnuCustomers`.
+- No implementes MVP ni crees presenters o vistas adicionales: los eventos deben manejarse directamente en los formularios.
+- No introduzcas patrones o abstracciones adicionales sin una necesidad concreta; este es un proyecto sencillo.
 
-## Estructura real (¡difiere de lo documentado en copilot-instructions.md!)
+## PostgreSQL
 
-```text
-Apps_TechService/
-├── IU/                  # Formularios WinForms  (NO "UI/" como dice copilot-instructions.md)
-└── Models/
-    ├── Entities/         # Entidades de dominio, en INGLÉS (Customer, Device, Technician,
-    │                     #   CorrectiveMaintenance, PreventiveMaintenance, MaintenanceTask...)
-    │                     #   excepto "Individuo" (clase base de Customer/Technician), que quedó en español.
-    └── Enums/            # Enums en inglés (ServiceStatus, MaintenanceType, UserRole)
-```
+- El proyecto usa `Npgsql` 8.0.6; no usa Entity Framework ni otro ORM.
+- `PostgresConnection` lee `ConnectionStrings:TechService` desde `appsettings.json`, copiado a la salida; actualmente apunta a `localhost:5432`, base `techservice`, usuario `postgres` y la contraseña configurada allí.
+- PostgreSQL debe estar iniciado antes de ejecutar la aplicación y el esquema debe haberse aplicado previamente con `Database/Scripts/001_initial_schema.sql`.
+- La persistencia de clientes usa una transacción para insertar o actualizar `individuals` y `customers`; conserva consultas parametrizadas, `using` y borrado lógico.
+- Si se cambia el nombre de la base en el código, actualiza también la documentación SQL relacionada; no asumas que `techservice_dev` coincide con la configuración ejecutable actual.
 
-- `.github/copilot-instructions.md` (930 líneas) ya fue actualizado para exigir nombres
-  **en inglés** (sección 6, regla "Establecer los nombres en inglés") y sus ejemplos de
-  entidades (sección 4) coinciden con el código real (`Customer`, `Device`, `Technician`,
-  etc.). Solo quedan ejemplos ilustrativos sueltos en español en otras secciones (5, 7,
-  24) que son conceptuales, no reglas de ubicación.
-- **Discrepancia que persiste:** las secciones 4 y 8 de `copilot-instructions.md` siguen
-  diciendo que los formularios van en `UI/`, pero el código real usa `IU/`. Sigue la
-  carpeta ya existente en el código (`IU/`) salvo que el usuario pida explícitamente
-  renombrarla; no renombres nada por tu cuenta sin confirmarlo.
-- No crear entidades de dominio dentro de `IU/`; no crear enums nuevos dentro de un
-  formulario si se reutilizan en otras partes.
-- `bin/` y `obj/` son artefactos generados por el build: nunca editarlos ni referenciarlos.
+## Convenciones
 
-## Convenciones de código (de `.github/copilot-instructions.md` y `.editorconfig`)
+- El código nuevo debe ser compatible con .NET 8 y usar nombres en inglés.
+- Respeta `.editorconfig`: tipos, métodos y propiedades en `PascalCase`; campos privados en `_camelCase`; parámetros y variables locales en `camelCase`.
+- `Nullable` está habilitado: maneja los nulos explícitamente y no uses `!` sin entender el warning que silencia.
+- No edites archivos `*.Designer.cs` para cambios de comportamiento; los cambios visuales los realiza manualmente el desarrollador.
+- Mantén los formularios centrados en interacción y evita SQL o reglas de negocio extensas dentro de ellos.
+- No ocultes excepciones con `catch` vacío o silencioso.
+- Para este proyecto demostrativo usa código síncrono convencional; no introduzcas `Task`, `async`, `await` ni manejo de hilos salvo una necesidad explícita.
+- No guardes otra cadena de conexión en código: modifica `appsettings.json` y conserva la clave `ConnectionStrings:TechService`.
 
-- PascalCase para clases, métodos, propiedades públicas y constantes; camelCase con
-  prefijo `_` para campos privados; camelCase para variables locales/parámetros.
-- Un formulario (`*_Click`, etc.) debe delegar a métodos con responsabilidad clara, no
-  contener lógica de negocio extensa.
-- No usar bloques `try {} catch {}` vacíos ni `catch (Exception)` silencioso.
-- No usar el operador `!` de supresión de nulos sin entender la causa del warning.
-- No introducir patrones/abstracciones/dependencias adicionales sin justificación clara
-  (evitar sobreingeniería); cambios mínimos y acotados al problema pedido.
-- `Nullable` está habilitado (`<Nullable>enable</Nullable>` en el .csproj): maneja los
-  nulos explícitamente.
-
-## Notas del dominio
-
-TechService gestiona clientes, equipos, mantenimientos (preventivo/correctivo) y su
-recepción/entrega. Antes de crear una clase nueva, evalúa si el concepto ya existe
-como entidad, enum o responsabilidad de una clase existente (ver sección 3 y 24 de
-`.github/copilot-instructions.md` para el detalle completo de reglas de POO,
-seguridad y manejo de errores; ese archivo es la fuente extensa, este `AGENTS.md`
-es el resumen operativo).
+Consulta `.github/copilot-instructions.md` para las directrices extensas de dominio y diseño, pero prevalecen la estructura real del código y estas restricciones explícitas.

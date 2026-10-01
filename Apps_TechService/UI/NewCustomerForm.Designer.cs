@@ -32,19 +32,20 @@ namespace Apps_TechService.UI
             label1 = new Label();
             iconButton1 = new FontAwesome.Sharp.IconButton();
             label2 = new Label();
-            maskedTextBox1 = new MaskedTextBox();
+            mskNationalId = new MaskedTextBox();
             label3 = new Label();
-            textBox1 = new TextBox();
+            txtName = new TextBox();
             label4 = new Label();
-            textBox2 = new TextBox();
+            txtLastname = new TextBox();
             label5 = new Label();
-            maskedTextBox2 = new MaskedTextBox();
+            mskPhone = new MaskedTextBox();
             label6 = new Label();
-            textBox3 = new TextBox();
-            textBox4 = new TextBox();
+            txtEmail = new TextBox();
+            txtAddress = new TextBox();
             panel2 = new Panel();
-            iconButton2 = new FontAwesome.Sharp.IconButton();
-            iconButton3 = new FontAwesome.Sharp.IconButton();
+            btnSave = new FontAwesome.Sharp.IconButton();
+            btnCancel = new FontAwesome.Sharp.IconButton();
+            label7 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -57,7 +58,7 @@ namespace Apps_TechService.UI
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(711, 60);
+            panel1.Size = new Size(909, 60);
             panel1.TabIndex = 0;
             // 
             // label1
@@ -96,14 +97,14 @@ namespace Apps_TechService.UI
             label2.TabIndex = 1;
             label2.Text = "Cédula";
             // 
-            // maskedTextBox1
+            // mskNationalId
             // 
-            maskedTextBox1.Font = new Font("Segoe UI Variable Display", 11F);
-            maskedTextBox1.Location = new Point(143, 48);
-            maskedTextBox1.Margin = new Padding(3, 3, 3, 24);
-            maskedTextBox1.Name = "maskedTextBox1";
-            maskedTextBox1.Size = new Size(380, 37);
-            maskedTextBox1.TabIndex = 2;
+            mskNationalId.Font = new Font("Segoe UI Variable Display", 11F);
+            mskNationalId.Location = new Point(147, 48);
+            mskNationalId.Margin = new Padding(3, 3, 3, 24);
+            mskNationalId.Name = "mskNationalId";
+            mskNationalId.Size = new Size(541, 37);
+            mskNationalId.TabIndex = 2;
             // 
             // label3
             // 
@@ -114,14 +115,14 @@ namespace Apps_TechService.UI
             label3.TabIndex = 3;
             label3.Text = "Nombre";
             // 
-            // textBox1
+            // txtName
             // 
-            textBox1.Font = new Font("Segoe UI Variable Display", 11F);
-            textBox1.Location = new Point(143, 112);
-            textBox1.Margin = new Padding(3, 3, 3, 24);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(380, 37);
-            textBox1.TabIndex = 4;
+            txtName.Font = new Font("Segoe UI Variable Display", 11F);
+            txtName.Location = new Point(147, 112);
+            txtName.Margin = new Padding(3, 3, 3, 24);
+            txtName.Name = "txtName";
+            txtName.Size = new Size(541, 37);
+            txtName.TabIndex = 4;
             // 
             // label4
             // 
@@ -133,14 +134,14 @@ namespace Apps_TechService.UI
             label4.TabIndex = 5;
             label4.Text = "Apellidos";
             // 
-            // textBox2
+            // txtLastname
             // 
-            textBox2.Font = new Font("Segoe UI Variable Display", 11F);
-            textBox2.Location = new Point(143, 176);
-            textBox2.Margin = new Padding(3, 3, 3, 24);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(380, 37);
-            textBox2.TabIndex = 6;
+            txtLastname.Font = new Font("Segoe UI Variable Display", 11F);
+            txtLastname.Location = new Point(147, 176);
+            txtLastname.Margin = new Padding(3, 3, 3, 24);
+            txtLastname.Name = "txtLastname";
+            txtLastname.Size = new Size(541, 37);
+            txtLastname.TabIndex = 6;
             // 
             // label5
             // 
@@ -151,14 +152,14 @@ namespace Apps_TechService.UI
             label5.TabIndex = 7;
             label5.Text = "Teléfono";
             // 
-            // maskedTextBox2
+            // mskPhone
             // 
-            maskedTextBox2.Font = new Font("Segoe UI Variable Display", 11F);
-            maskedTextBox2.Location = new Point(143, 240);
-            maskedTextBox2.Margin = new Padding(3, 3, 3, 24);
-            maskedTextBox2.Name = "maskedTextBox2";
-            maskedTextBox2.Size = new Size(380, 37);
-            maskedTextBox2.TabIndex = 8;
+            mskPhone.Font = new Font("Segoe UI Variable Display", 11F);
+            mskPhone.Location = new Point(147, 240);
+            mskPhone.Margin = new Padding(3, 3, 3, 24);
+            mskPhone.Name = "mskPhone";
+            mskPhone.Size = new Size(541, 37);
+            mskPhone.TabIndex = 8;
             // 
             // label6
             // 
@@ -169,89 +170,101 @@ namespace Apps_TechService.UI
             label6.TabIndex = 9;
             label6.Text = "Correo";
             // 
-            // textBox3
+            // txtEmail
             // 
-            textBox3.Font = new Font("Segoe UI Variable Display", 11F);
-            textBox3.Location = new Point(143, 304);
-            textBox3.Margin = new Padding(3, 3, 3, 24);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(380, 37);
-            textBox3.TabIndex = 10;
+            txtEmail.Font = new Font("Segoe UI Variable Display", 11F);
+            txtEmail.Location = new Point(147, 304);
+            txtEmail.Margin = new Padding(3, 3, 3, 24);
+            txtEmail.Name = "txtEmail";
+            txtEmail.Size = new Size(541, 37);
+            txtEmail.TabIndex = 10;
             // 
-            // textBox4
+            // txtAddress
             // 
-            textBox4.Location = new Point(42, 368);
-            textBox4.Multiline = true;
-            textBox4.Name = "textBox4";
-            textBox4.PlaceholderText = "Dirección";
-            textBox4.Size = new Size(481, 133);
-            textBox4.TabIndex = 11;
+            txtAddress.Location = new Point(147, 368);
+            txtAddress.Multiline = true;
+            txtAddress.Name = "txtAddress";
+            txtAddress.PlaceholderText = "Dirección";
+            txtAddress.Size = new Size(541, 133);
+            txtAddress.TabIndex = 11;
             // 
             // panel2
             // 
-            panel2.Controls.Add(maskedTextBox1);
-            panel2.Controls.Add(textBox4);
+            panel2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panel2.Controls.Add(label7);
+            panel2.Controls.Add(mskNationalId);
+            panel2.Controls.Add(txtAddress);
             panel2.Controls.Add(label2);
-            panel2.Controls.Add(textBox3);
+            panel2.Controls.Add(txtEmail);
             panel2.Controls.Add(label3);
             panel2.Controls.Add(label6);
-            panel2.Controls.Add(textBox1);
-            panel2.Controls.Add(maskedTextBox2);
+            panel2.Controls.Add(txtName);
+            panel2.Controls.Add(mskPhone);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label5);
-            panel2.Controls.Add(textBox2);
-            panel2.Location = new Point(62, 166);
+            panel2.Controls.Add(txtLastname);
+            panel2.Location = new Point(61, 196);
             panel2.Name = "panel2";
-            panel2.Size = new Size(580, 562);
+            panel2.Size = new Size(792, 562);
             panel2.TabIndex = 12;
             // 
-            // iconButton2
+            // btnSave
             // 
-            iconButton2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            iconButton2.BackColor = SystemColors.HotTrack;
-            iconButton2.Cursor = Cursors.Hand;
-            iconButton2.FlatAppearance.BorderSize = 0;
-            iconButton2.FlatStyle = FlatStyle.Flat;
-            iconButton2.Font = new Font("Segoe UI Variable Display", 10F);
-            iconButton2.ForeColor = Color.WhiteSmoke;
-            iconButton2.IconChar = FontAwesome.Sharp.IconChar.None;
-            iconButton2.IconColor = Color.Black;
-            iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconButton2.Location = new Point(351, 88);
-            iconButton2.Margin = new Padding(3, 32, 3, 3);
-            iconButton2.Name = "iconButton2";
-            iconButton2.Size = new Size(132, 56);
-            iconButton2.TabIndex = 13;
-            iconButton2.Text = "Guardar";
-            iconButton2.UseVisualStyleBackColor = false;
+            btnSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSave.BackColor = SystemColors.HotTrack;
+            btnSave.Cursor = Cursors.Hand;
+            btnSave.FlatAppearance.BorderSize = 0;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.Font = new Font("Segoe UI Variable Display", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSave.ForeColor = Color.WhiteSmoke;
+            btnSave.IconChar = FontAwesome.Sharp.IconChar.None;
+            btnSave.IconColor = Color.Black;
+            btnSave.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnSave.Location = new Point(465, 95);
+            btnSave.Margin = new Padding(3, 32, 3, 3);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(174, 56);
+            btnSave.TabIndex = 13;
+            btnSave.Text = "Guardar";
+            btnSave.UseVisualStyleBackColor = false;
             // 
-            // iconButton3
+            // btnCancel
             // 
-            iconButton3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            iconButton3.BackColor = Color.Gainsboro;
-            iconButton3.Cursor = Cursors.Hand;
-            iconButton3.FlatAppearance.BorderSize = 0;
-            iconButton3.FlatStyle = FlatStyle.Flat;
-            iconButton3.Font = new Font("Segoe UI Variable Display", 10F);
-            iconButton3.IconChar = FontAwesome.Sharp.IconChar.None;
-            iconButton3.IconColor = Color.Black;
-            iconButton3.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconButton3.Location = new Point(510, 88);
-            iconButton3.Margin = new Padding(24, 32, 3, 3);
-            iconButton3.Name = "iconButton3";
-            iconButton3.Size = new Size(132, 56);
-            iconButton3.TabIndex = 14;
-            iconButton3.Text = "Cancelar";
-            iconButton3.UseVisualStyleBackColor = false;
+            btnCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCancel.BackColor = Color.Gainsboro;
+            btnCancel.Cursor = Cursors.Hand;
+            btnCancel.FlatAppearance.BorderSize = 0;
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Segoe UI Variable Display", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnCancel.IconChar = FontAwesome.Sharp.IconChar.None;
+            btnCancel.IconColor = Color.Black;
+            btnCancel.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            btnCancel.Location = new Point(679, 95);
+            btnCancel.Margin = new Padding(24, 32, 3, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(174, 56);
+            btnCancel.TabIndex = 14;
+            btnCancel.Text = "Cancelar";
+            btnCancel.UseVisualStyleBackColor = false;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label7.Location = new Point(47, 371);
+            label7.Name = "label7";
+            label7.Size = new Size(94, 28);
+            label7.TabIndex = 12;
+            label7.Text = "Dirección";
             // 
             // NewCustomerForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
-            ClientSize = new Size(711, 798);
-            Controls.Add(iconButton3);
-            Controls.Add(iconButton2);
+            ClientSize = new Size(909, 836);
+            Controls.Add(btnCancel);
+            Controls.Add(btnSave);
             Controls.Add(panel2);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
@@ -270,18 +283,19 @@ namespace Apps_TechService.UI
         private Label label1;
         private FontAwesome.Sharp.IconButton iconButton1;
         private Label label2;
-        private MaskedTextBox maskedTextBox1;
+        private MaskedTextBox mskNationalId;
         private Label label3;
-        private TextBox textBox1;
+        private TextBox txtName;
         private Label label4;
-        private TextBox textBox2;
+        private TextBox txtLastname;
         private Label label5;
-        private MaskedTextBox maskedTextBox2;
+        private MaskedTextBox mskPhone;
         private Label label6;
-        private TextBox textBox3;
-        private TextBox textBox4;
+        private TextBox txtEmail;
+        private TextBox txtAddress;
         private Panel panel2;
-        private FontAwesome.Sharp.IconButton iconButton2;
-        private FontAwesome.Sharp.IconButton iconButton3;
+        private FontAwesome.Sharp.IconButton btnSave;
+        private FontAwesome.Sharp.IconButton btnCancel;
+        private Label label7;
     }
 }

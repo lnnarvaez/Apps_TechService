@@ -32,7 +32,7 @@ namespace Apps_TechService
             BtnClosed = new FontAwesome.Sharp.IconButton();
             splitContainer1 = new SplitContainer();
             iconButton6 = new FontAwesome.Sharp.IconButton();
-            iconButton5 = new FontAwesome.Sharp.IconButton();
+            mnuCustomers = new FontAwesome.Sharp.IconButton();
             iconButton4 = new FontAwesome.Sharp.IconButton();
             iconButton3 = new FontAwesome.Sharp.IconButton();
             iconButton2 = new FontAwesome.Sharp.IconButton();
@@ -83,7 +83,7 @@ namespace Apps_TechService
             // 
             splitContainer1.Panel1.BackColor = Color.FromArgb(17, 52, 87);
             splitContainer1.Panel1.Controls.Add(iconButton6);
-            splitContainer1.Panel1.Controls.Add(iconButton5);
+            splitContainer1.Panel1.Controls.Add(mnuCustomers);
             splitContainer1.Panel1.Controls.Add(iconButton4);
             splitContainer1.Panel1.Controls.Add(iconButton3);
             splitContainer1.Panel1.Controls.Add(iconButton2);
@@ -118,24 +118,24 @@ namespace Apps_TechService
             iconButton6.TextImageRelation = TextImageRelation.ImageBeforeText;
             iconButton6.UseVisualStyleBackColor = true;
             // 
-            // iconButton5
+            // mnuCustomers
             // 
-            iconButton5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            iconButton5.FlatAppearance.BorderSize = 0;
-            iconButton5.FlatStyle = FlatStyle.Flat;
-            iconButton5.Font = new Font("Segoe UI Variable Display", 11F);
-            iconButton5.ForeColor = SystemColors.ButtonFace;
-            iconButton5.IconChar = FontAwesome.Sharp.IconChar.None;
-            iconButton5.IconColor = Color.Black;
-            iconButton5.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconButton5.Location = new Point(4, 280);
-            iconButton5.Name = "iconButton5";
-            iconButton5.Size = new Size(260, 56);
-            iconButton5.TabIndex = 4;
-            iconButton5.Text = "Clientes";
-            iconButton5.TextAlign = ContentAlignment.MiddleLeft;
-            iconButton5.TextImageRelation = TextImageRelation.ImageBeforeText;
-            iconButton5.UseVisualStyleBackColor = true;
+            mnuCustomers.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            mnuCustomers.FlatAppearance.BorderSize = 0;
+            mnuCustomers.FlatStyle = FlatStyle.Flat;
+            mnuCustomers.Font = new Font("Segoe UI Variable Display", 11F);
+            mnuCustomers.ForeColor = SystemColors.ButtonFace;
+            mnuCustomers.IconChar = FontAwesome.Sharp.IconChar.None;
+            mnuCustomers.IconColor = Color.Black;
+            mnuCustomers.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            mnuCustomers.Location = new Point(4, 280);
+            mnuCustomers.Name = "mnuCustomers";
+            mnuCustomers.Size = new Size(260, 56);
+            mnuCustomers.TabIndex = 4;
+            mnuCustomers.Text = "Clientes";
+            mnuCustomers.TextAlign = ContentAlignment.MiddleLeft;
+            mnuCustomers.TextImageRelation = TextImageRelation.ImageBeforeText;
+            mnuCustomers.UseVisualStyleBackColor = true;
             // 
             // iconButton4
             // 
@@ -243,7 +243,7 @@ namespace Apps_TechService
         private FontAwesome.Sharp.IconButton iconButton1;
         private FontAwesome.Sharp.IconButton iconButton3;
         private FontAwesome.Sharp.IconButton iconButton6;
-        private FontAwesome.Sharp.IconButton iconButton5;
+        private FontAwesome.Sharp.IconButton mnuCustomers;
         private FontAwesome.Sharp.IconButton iconButton4;
     }
 }
