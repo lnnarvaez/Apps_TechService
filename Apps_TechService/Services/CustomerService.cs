@@ -1,6 +1,6 @@
 using System.Net.Mail;
 using Apps_TechService.Data.Repositories;
-using Apps_TechService.Models.Customers;
+using Apps_TechService.Models.Entities;
 
 namespace Apps_TechService.Services;
 
@@ -16,15 +16,16 @@ public sealed class CustomerService
     /// <summary>
     /// Valida y crea un cliente.
     /// </summary>
-    public CustomerData Create(CustomerInput customer)
+    public Customer Create(Customer customer)
     {
-        return _customerRepository.Create(Validate(customer));
+        Validate(customer);
+        return _customerRepository.Create(customer);
     }
 
     /// <summary>
     /// Busca un cliente por su identificador.
     /// </summary>
-    public CustomerData? GetById(long customerId)
+    public Customer? GetById(long customerId)
     {
         ValidateId(customerId);
         return _customerRepository.GetById(customerId);
@@ -33,18 +34,16 @@ public sealed class CustomerService
     /// <summary>
     /// Obtiene los clientes activos.
     /// </summary>
-    public IReadOnlyList<CustomerData> GetAll()
-    {
-        return _customerRepository.GetAll();
-    }
+    public IReadOnlyList<Customer> GetAll() => _customerRepository.GetAll();
 
     /// <summary>
     /// Valida y actualiza un cliente.
     /// </summary>
-    public bool Update(long customerId, CustomerInput customer)
+    public bool Update(Customer customer)
     {
-        ValidateId(customerId);
-        return _customerRepository.Update(customerId, Validate(customer));
+        Validate(customer);
+        ValidateId(customer.CustomerId);
+        return _customerRepository.Update(customer);
     }
 
     /// <summary>
@@ -56,11 +55,11 @@ public sealed class CustomerService
         return _customerRepository.Deactivate(customerId);
     }
 
-    private static CustomerInput Validate(CustomerInput customer)
+    private static void Validate(Customer customer)
     {
-        string identificationNumber = Required(customer.IdentificationNumber, nameof(customer.IdentificationNumber), 30);
-        string firstName = Required(customer.FirstName, nameof(customer.FirstName), 100);
-        string lastName = Required(customer.LastName, nameof(customer.LastName), 100);
+        Required(customer.NationalID, nameof(customer.NationalID), 30);
+        Required(customer.FirstName, nameof(customer.FirstName), 100);
+        Required(customer.LastName, nameof(customer.LastName), 100);
         string email = Required(customer.Email, nameof(customer.Email), 150);
 
         try
@@ -71,16 +70,6 @@ public sealed class CustomerService
         {
             throw new ArgumentException("El correo electrónico no es válido.", nameof(customer));
         }
-
-        return customer with
-        {
-            IdentificationNumber = identificationNumber,
-            FirstName = firstName,
-            LastName = lastName,
-            Phone = Normalize(customer.Phone, 30),
-            Email = email,
-            Address = Normalize(customer.Address, 250)
-        };
     }
 
     private static string Required(string value, string parameterName, int maxLength)
@@ -90,22 +79,6 @@ public sealed class CustomerService
         if (normalized.Length > maxLength)
         {
             throw new ArgumentException($"El valor no puede superar {maxLength} caracteres.", parameterName);
-        }
-
-        return normalized;
-    }
-
-    private static string? Normalize(string? value, int maxLength)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return null;
-        }
-
-        string normalized = value.Trim();
-        if (normalized.Length > maxLength)
-        {
-            throw new ArgumentException($"El valor no puede superar {maxLength} caracteres.", nameof(value));
         }
 
         return normalized;

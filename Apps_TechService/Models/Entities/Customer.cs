@@ -1,59 +1,39 @@
-namespace Apps_TechService.Models.Entities
+namespace Apps_TechService.Models.Entities;
+
+/// <summary>
+/// Cliente persistido en customers y relacionado con individuals.
+/// </summary>
+public sealed class Customer : Individuo
 {
-    public class Customer : Individuo
-    {
-        #region Properties
-        public string? Address
-        {
-            get
-            {
-                return Address;
-            }
-            set
-            {
-                Address = NormalizeAddress(value);
-            }
-        }
+    public long CustomerId { get; internal set; }
+    public string? Address { get; private set; }
 
-        #endregion Properties
-
-        #region Constructors
-        public Customer(
+    public Customer(
         string nationalId,
         string firstName,
         string lastName,
+        string email,
+        string? phone,
         string? address = null)
-        : base(
-                nationalId,
-                firstName,
-                lastName)
-        {
-            Address = NormalizeAddress(address);
-        }
+        : base(nationalId, firstName, lastName, email, phone)
+    {
+        Address = Normalize(address);
+    }
 
-        /// <summary>
-        /// Inicialización de nuevas instancias como una instancia nula
-        /// </summary>
-        protected Customer()
-        {
-            // Constructor por default
-            Address = null;
-        }
-        
-        #endregion Constructors
+    internal Customer()
+    {
+    }
 
-        
-        /* public override string GetProfile ()
-        {
-            return $"Customer: {FullName} (ID: {NationalID})";
-        }*/
+    /// <summary>
+    /// Actualiza la dirección del cliente.
+    /// </summary>
+    public void UpdateAddress(string? address)
+    {
+        Address = Normalize(address);
+    }
 
-        private static string? NormalizeAddress(string? address)
-        {
-            return string.IsNullOrWhiteSpace(address)
-                ? null
-                : address.Trim();
-        }
-        
-    } // End of class Customer
-} // End of namespace
+    private static string? Normalize(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+    }
+}

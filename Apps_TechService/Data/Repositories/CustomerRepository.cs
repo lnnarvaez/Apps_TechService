@@ -1,5 +1,5 @@
 using Apps_TechService.Database;
-using Apps_TechService.Models.Customers;
+using Apps_TechService.Models.Entities;
 using Npgsql;
 
 namespace Apps_TechService.Data.Repositories;
@@ -14,9 +14,9 @@ public sealed class CustomerRepository
     }
 
     /// <summary>
-    /// Inserta la persona y su registro de cliente en una sola transacción.
+    /// Inserta la persona y el cliente en una sola transacción.
     /// </summary>
-    public CustomerData Create(CustomerInput customer)
+    public Customer Create(Customer customer)
     {
         using NpgsqlConnection connection = _connectionFactory.OpenConnection();
         using NpgsqlTransaction transaction = connection.BeginTransaction();
@@ -29,7 +29,7 @@ public sealed class CustomerRepository
             RETURNING individual_id;
             """;
         using NpgsqlCommand individualCommand = new(individualSql, connection, transaction);
-        AddCustomerParameters(individualCommand, customer);
+        AddIndividualParameters(individualCommand, customer);
         long individualId = Convert.ToInt64(individualCommand.ExecuteScalar());
 
         const string customerSql = """
@@ -43,14 +43,15 @@ public sealed class CustomerRepository
         long customerId = Convert.ToInt64(customerCommand.ExecuteScalar());
 
         transaction.Commit();
-        return new CustomerData(customerId, individualId, customer.IdentificationNumber,
-            customer.FirstName, customer.LastName, customer.Phone, customer.Email, customer.Address, true);
+        customer.IndividualId = individualId;
+        customer.CustomerId = customerId;
+        return customer;
     }
 
     /// <summary>
     /// Busca un cliente por su identificador.
     /// </summary>
-    public CustomerData? GetById(long customerId)
+    public Customer? GetById(long customerId)
     {
         using NpgsqlConnection connection = _connectionFactory.OpenConnection();
         const string sql = """
@@ -69,7 +70,7 @@ public sealed class CustomerRepository
     /// <summary>
     /// Obtiene todos los clientes activos.
     /// </summary>
-    public IReadOnlyList<CustomerData> GetAll()
+    public IReadOnlyList<Customer> GetAll()
     {
         using NpgsqlConnection connection = _connectionFactory.OpenConnection();
         const string sql = """
@@ -82,7 +83,7 @@ public sealed class CustomerRepository
             """;
         using NpgsqlCommand command = new(sql, connection);
         using NpgsqlDataReader reader = command.ExecuteReader();
-        List<CustomerData> customers = [];
+        List<Customer> customers = [];
         while (reader.Read())
         {
             customers.Add(MapCustomer(reader));
@@ -92,9 +93,9 @@ public sealed class CustomerRepository
     }
 
     /// <summary>
-    /// Actualiza los datos de persona y cliente en una transacción.
+    /// Actualiza los datos de la persona y del cliente.
     /// </summary>
-    public bool Update(long customerId, CustomerInput customer)
+    public bool Update(Customer customer)
     {
         using NpgsqlConnection connection = _connectionFactory.OpenConnection();
         using NpgsqlTransaction transaction = connection.BeginTransaction();
@@ -107,8 +108,8 @@ public sealed class CustomerRepository
             WHERE c.customer_id = @customer_id AND i.individual_id = c.individual_id;
             """;
         using NpgsqlCommand individualCommand = new(individualSql, connection, transaction);
-        AddCustomerParameters(individualCommand, customer);
-        individualCommand.Parameters.AddWithValue("customer_id", customerId);
+        AddIndividualParameters(individualCommand, customer);
+        individualCommand.Parameters.AddWithValue("customer_id", customer.CustomerId);
         if (individualCommand.ExecuteNonQuery() == 0)
         {
             transaction.Rollback();
@@ -121,14 +122,14 @@ public sealed class CustomerRepository
             """;
         using NpgsqlCommand customerCommand = new(customerSql, connection, transaction);
         customerCommand.Parameters.AddWithValue("address", (object?)customer.Address ?? DBNull.Value);
-        customerCommand.Parameters.AddWithValue("customer_id", customerId);
+        customerCommand.Parameters.AddWithValue("customer_id", customer.CustomerId);
         customerCommand.ExecuteNonQuery();
         transaction.Commit();
         return true;
     }
 
     /// <summary>
-    /// Desactiva el cliente y la persona relacionada.
+    /// Desactiva lógicamente el cliente y su persona relacionada.
     /// </summary>
     public bool Deactivate(long customerId)
     {
@@ -157,19 +158,27 @@ public sealed class CustomerRepository
         return true;
     }
 
-    private static void AddCustomerParameters(NpgsqlCommand command, CustomerInput customer)
+    private static void AddIndividualParameters(NpgsqlCommand command, Individuo individual)
     {
-        command.Parameters.AddWithValue("identification_number", customer.IdentificationNumber);
-        command.Parameters.AddWithValue("first_name", customer.FirstName);
-        command.Parameters.AddWithValue("last_name", customer.LastName);
-        command.Parameters.AddWithValue("email", customer.Email);
-        command.Parameters.AddWithValue("phone", (object?)customer.Phone ?? DBNull.Value);
+        command.Parameters.AddWithValue("identification_number", individual.NationalID);
+        command.Parameters.AddWithValue("first_name", individual.FirstName);
+        command.Parameters.AddWithValue("last_name", individual.LastName);
+        command.Parameters.AddWithValue("email", individual.Email);
+        command.Parameters.AddWithValue("phone", (object?)individual.Phone ?? DBNull.Value);
     }
 
-    private static CustomerData MapCustomer(NpgsqlDataReader reader)
+    private static Customer MapCustomer(NpgsqlDataReader reader)
     {
-        return new CustomerData(reader.GetInt64(0), reader.GetInt64(1), reader.GetString(2),
-            reader.GetString(3), reader.GetString(4), reader.IsDBNull(5) ? null : reader.GetString(5),
-            reader.GetString(6), reader.IsDBNull(7) ? null : reader.GetString(7), reader.GetBoolean(8));
+        Customer customer = new(
+            reader.GetString(2),
+            reader.GetString(3),
+            reader.GetString(4),
+            reader.GetString(6),
+            reader.IsDBNull(5) ? null : reader.GetString(5),
+            reader.IsDBNull(7) ? null : reader.GetString(7));
+        customer.CustomerId = reader.GetInt64(0);
+        customer.IndividualId = reader.GetInt64(1);
+        customer.IsActive = reader.GetBoolean(8);
+        return customer;
     }
 }

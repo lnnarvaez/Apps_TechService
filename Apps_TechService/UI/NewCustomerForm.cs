@@ -1,6 +1,6 @@
 using Apps_TechService.Data.Repositories;
 using Apps_TechService.Database;
-using Apps_TechService.Models.Customers;
+using Apps_TechService.Models.Entities;
 using Apps_TechService.Services;
 
 namespace Apps_TechService.UI
@@ -23,12 +23,12 @@ namespace Apps_TechService.UI
             try
             {
                 btnSave.Enabled = false;
-                CustomerInput customer = new(
+                Customer customer = new(
                     mskNationalId.Text,
                     txtName.Text,
                     txtLastname.Text,
-                    mskPhone.Text,
                     txtEmail.Text,
+                    mskPhone.Text,
                     txtAddress.Text);
 
                 _customerService.Create(customer);
