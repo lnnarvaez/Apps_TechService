@@ -29,6 +29,7 @@ namespace Apps_TechService
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            pctLogo = new PictureBox();
             BtnClosed = new FontAwesome.Sharp.IconButton();
             splitContainer1 = new SplitContainer();
             iconButton6 = new FontAwesome.Sharp.IconButton();
@@ -38,6 +39,7 @@ namespace Apps_TechService
             iconButton2 = new FontAwesome.Sharp.IconButton();
             iconButton1 = new FontAwesome.Sharp.IconButton();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pctLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -46,12 +48,25 @@ namespace Apps_TechService
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(254, 254, 254);
+            panel1.Controls.Add(pctLogo);
             panel1.Controls.Add(BtnClosed);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(1597, 120);
             panel1.TabIndex = 0;
+            // 
+            // pctLogo
+            // 
+            pctLogo.Image = Properties.Resources.logo;
+            pctLogo.Location = new Point(37, 22);
+            pctLogo.Margin = new Padding(48, 8, 3, 8);
+            pctLogo.Name = "pctLogo";
+            pctLogo.Padding = new Padding(4);
+            pctLogo.Size = new Size(274, 78);
+            pctLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            pctLogo.TabIndex = 1;
+            pctLogo.TabStop = false;
             // 
             // BtnClosed
             // 
@@ -81,7 +96,7 @@ namespace Apps_TechService
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.BackColor = Color.FromArgb(17, 52, 87);
+            splitContainer1.Panel1.BackColor = Color.FromArgb(16, 51, 84);
             splitContainer1.Panel1.Controls.Add(iconButton6);
             splitContainer1.Panel1.Controls.Add(mnuCustomers);
             splitContainer1.Panel1.Controls.Add(iconButton4);
@@ -106,11 +121,13 @@ namespace Apps_TechService
             iconButton6.FlatStyle = FlatStyle.Flat;
             iconButton6.Font = new Font("Segoe UI Variable Display", 11F);
             iconButton6.ForeColor = SystemColors.ButtonFace;
-            iconButton6.IconChar = FontAwesome.Sharp.IconChar.None;
-            iconButton6.IconColor = Color.Black;
+            iconButton6.IconChar = FontAwesome.Sharp.IconChar.ChartColumn;
+            iconButton6.IconColor = Color.FromArgb(254, 254, 254);
             iconButton6.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconButton6.Location = new Point(4, 342);
+            iconButton6.ImageAlign = ContentAlignment.MiddleLeft;
+            iconButton6.Location = new Point(4, 352);
             iconButton6.Name = "iconButton6";
+            iconButton6.Padding = new Padding(8, 0, 0, 0);
             iconButton6.Size = new Size(260, 56);
             iconButton6.TabIndex = 5;
             iconButton6.Text = "Informes";
@@ -125,11 +142,14 @@ namespace Apps_TechService
             mnuCustomers.FlatStyle = FlatStyle.Flat;
             mnuCustomers.Font = new Font("Segoe UI Variable Display", 11F);
             mnuCustomers.ForeColor = SystemColors.ButtonFace;
-            mnuCustomers.IconChar = FontAwesome.Sharp.IconChar.None;
-            mnuCustomers.IconColor = Color.Black;
+            mnuCustomers.IconChar = FontAwesome.Sharp.IconChar.UserFriends;
+            mnuCustomers.IconColor = Color.FromArgb(254, 254, 254);
             mnuCustomers.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            mnuCustomers.Location = new Point(4, 280);
+            mnuCustomers.ImageAlign = ContentAlignment.MiddleLeft;
+            mnuCustomers.Location = new Point(0, 290);
+            mnuCustomers.Margin = new Padding(3, 3, 3, 8);
             mnuCustomers.Name = "mnuCustomers";
+            mnuCustomers.Padding = new Padding(8, 0, 0, 0);
             mnuCustomers.Size = new Size(260, 56);
             mnuCustomers.TabIndex = 4;
             mnuCustomers.Text = "Clientes";
@@ -144,11 +164,14 @@ namespace Apps_TechService
             iconButton4.FlatStyle = FlatStyle.Flat;
             iconButton4.Font = new Font("Segoe UI Variable Display", 11F);
             iconButton4.ForeColor = SystemColors.ButtonFace;
-            iconButton4.IconChar = FontAwesome.Sharp.IconChar.None;
-            iconButton4.IconColor = Color.Black;
+            iconButton4.IconChar = FontAwesome.Sharp.IconChar.Screwdriver;
+            iconButton4.IconColor = Color.FromArgb(254, 254, 254);
             iconButton4.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconButton4.Location = new Point(4, 218);
+            iconButton4.ImageAlign = ContentAlignment.MiddleLeft;
+            iconButton4.Location = new Point(4, 233);
+            iconButton4.Margin = new Padding(3, 3, 3, 8);
             iconButton4.Name = "iconButton4";
+            iconButton4.Padding = new Padding(8, 0, 0, 0);
             iconButton4.Size = new Size(260, 56);
             iconButton4.TabIndex = 3;
             iconButton4.Text = "Mantenimientos";
@@ -163,11 +186,14 @@ namespace Apps_TechService
             iconButton3.FlatStyle = FlatStyle.Flat;
             iconButton3.Font = new Font("Segoe UI Variable Display", 11F);
             iconButton3.ForeColor = SystemColors.ButtonFace;
-            iconButton3.IconChar = FontAwesome.Sharp.IconChar.None;
-            iconButton3.IconColor = Color.Black;
+            iconButton3.IconChar = FontAwesome.Sharp.IconChar.Display;
+            iconButton3.IconColor = Color.FromArgb(254, 254, 254);
             iconButton3.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconButton3.Location = new Point(4, 156);
+            iconButton3.ImageAlign = ContentAlignment.MiddleLeft;
+            iconButton3.Location = new Point(0, 166);
+            iconButton3.Margin = new Padding(3, 3, 3, 8);
             iconButton3.Name = "iconButton3";
+            iconButton3.Padding = new Padding(8, 0, 0, 0);
             iconButton3.Size = new Size(260, 56);
             iconButton3.TabIndex = 2;
             iconButton3.Text = "Equipos";
@@ -182,11 +208,14 @@ namespace Apps_TechService
             iconButton2.FlatStyle = FlatStyle.Flat;
             iconButton2.Font = new Font("Segoe UI Variable Display", 11F);
             iconButton2.ForeColor = SystemColors.ButtonFace;
-            iconButton2.IconChar = FontAwesome.Sharp.IconChar.None;
-            iconButton2.IconColor = Color.Black;
+            iconButton2.IconChar = FontAwesome.Sharp.IconChar.FileCirclePlus;
+            iconButton2.IconColor = Color.FromArgb(254, 254, 254);
             iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            iconButton2.Location = new Point(4, 94);
+            iconButton2.ImageAlign = ContentAlignment.MiddleLeft;
+            iconButton2.Location = new Point(4, 99);
+            iconButton2.Margin = new Padding(3, 3, 3, 8);
             iconButton2.Name = "iconButton2";
+            iconButton2.Padding = new Padding(8, 0, 0, 0);
             iconButton2.Size = new Size(260, 56);
             iconButton2.TabIndex = 1;
             iconButton2.Text = "Servicios";
@@ -197,7 +226,7 @@ namespace Apps_TechService
             // iconButton1
             // 
             iconButton1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            iconButton1.BackColor = SystemColors.HotTrack;
+            iconButton1.BackColor = Color.FromArgb(3, 99, 204);
             iconButton1.FlatAppearance.BorderSize = 0;
             iconButton1.FlatStyle = FlatStyle.Flat;
             iconButton1.Font = new Font("Segoe UI Variable Display", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -207,8 +236,9 @@ namespace Apps_TechService
             iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
             iconButton1.ImageAlign = ContentAlignment.MiddleLeft;
             iconButton1.Location = new Point(4, 32);
-            iconButton1.Margin = new Padding(0, 32, 16, 3);
+            iconButton1.Margin = new Padding(0, 32, 16, 8);
             iconButton1.Name = "iconButton1";
+            iconButton1.Padding = new Padding(8, 0, 0, 0);
             iconButton1.Size = new Size(260, 56);
             iconButton1.TabIndex = 0;
             iconButton1.Text = "Dashboard";
@@ -228,6 +258,7 @@ namespace Apps_TechService
             Text = "Form1";
             WindowState = FormWindowState.Maximized;
             panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pctLogo).EndInit();
             splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
@@ -245,5 +276,6 @@ namespace Apps_TechService
         private FontAwesome.Sharp.IconButton iconButton6;
         private FontAwesome.Sharp.IconButton mnuCustomers;
         private FontAwesome.Sharp.IconButton iconButton4;
+        private PictureBox pctLogo;
     }
 }

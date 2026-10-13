@@ -28,7 +28,7 @@ namespace Apps_TechService.UI
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
+            pnlTitle = new Panel();
             label1 = new Label();
             iconButton1 = new FontAwesome.Sharp.IconButton();
             label2 = new Label();
@@ -43,23 +43,23 @@ namespace Apps_TechService.UI
             txtEmail = new TextBox();
             txtAddress = new TextBox();
             panel2 = new Panel();
+            label7 = new Label();
             btnSave = new FontAwesome.Sharp.IconButton();
             btnCancel = new FontAwesome.Sharp.IconButton();
-            label7 = new Label();
-            panel1.SuspendLayout();
+            pnlTitle.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
-            // panel1
+            // pnlTitle
             // 
-            panel1.BackColor = Color.Gainsboro;
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(iconButton1);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(909, 60);
-            panel1.TabIndex = 0;
+            pnlTitle.BackColor = Color.Gainsboro;
+            pnlTitle.Controls.Add(label1);
+            pnlTitle.Controls.Add(iconButton1);
+            pnlTitle.Dock = DockStyle.Top;
+            pnlTitle.Location = new Point(0, 0);
+            pnlTitle.Name = "pnlTitle";
+            pnlTitle.Size = new Size(909, 60);
+            pnlTitle.TabIndex = 0;
             // 
             // label1
             // 
@@ -208,6 +208,16 @@ namespace Apps_TechService.UI
             panel2.Size = new Size(792, 562);
             panel2.TabIndex = 12;
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label7.Location = new Point(47, 371);
+            label7.Name = "label7";
+            label7.Size = new Size(94, 28);
+            label7.TabIndex = 12;
+            label7.Text = "Dirección";
+            // 
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -247,16 +257,6 @@ namespace Apps_TechService.UI
             btnCancel.Text = "Cancelar";
             btnCancel.UseVisualStyleBackColor = false;
             // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label7.Location = new Point(47, 371);
-            label7.Name = "label7";
-            label7.Size = new Size(94, 28);
-            label7.TabIndex = 12;
-            label7.Text = "Dirección";
-            // 
             // NewCustomerForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -266,12 +266,12 @@ namespace Apps_TechService.UI
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(panel2);
-            Controls.Add(panel1);
+            Controls.Add(pnlTitle);
             FormBorderStyle = FormBorderStyle.None;
             Name = "NewCustomerForm";
             Text = "NewCustomerForm";
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            pnlTitle.ResumeLayout(false);
+            pnlTitle.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ResumeLayout(false);
@@ -279,7 +279,7 @@ namespace Apps_TechService.UI
 
         #endregion
 
-        private Panel panel1;
+        private Panel pnlTitle;
         private Label label1;
         private FontAwesome.Sharp.IconButton iconButton1;
         private Label label2;
