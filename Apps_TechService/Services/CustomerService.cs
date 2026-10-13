@@ -32,9 +32,10 @@ public sealed class CustomerService
     }
 
     /// <summary>
-    /// Obtiene los clientes activos.
+    /// Obtiene todos los clientes para la lista.
     /// </summary>
-    public IReadOnlyList<Customer> GetAll() => _customerRepository.GetAll();
+    public IReadOnlyList<Customer> GetAll(bool disabledOnly)
+        => _customerRepository.GetAll(disabledOnly);
 
     /// <summary>
     /// Valida y actualiza un cliente.

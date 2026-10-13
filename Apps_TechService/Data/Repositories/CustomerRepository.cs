@@ -68,9 +68,9 @@ public sealed class CustomerRepository
     }
 
     /// <summary>
-    /// Obtiene todos los clientes activos.
+    /// Obtiene todos los clientes relacionados con individuals.
     /// </summary>
-    public IReadOnlyList<Customer> GetAll()
+    public IReadOnlyList<Customer> GetAll(bool disabledOnly)
     {
         using NpgsqlConnection connection = _connectionFactory.OpenConnection();
         const string sql = """
@@ -78,10 +78,11 @@ public sealed class CustomerRepository
                    i.first_name, i.last_name, i.phone, i.email, c.address, c.is_active
             FROM customers c
             INNER JOIN individuals i ON i.individual_id = c.individual_id
-            WHERE c.is_active = TRUE AND i.is_active = TRUE
+            WHERE c.is_active = @is_active
             ORDER BY i.last_name, i.first_name;
             """;
         using NpgsqlCommand command = new(sql, connection);
+        command.Parameters.AddWithValue("is_active", !disabledOnly);
         using NpgsqlDataReader reader = command.ExecuteReader();
         List<Customer> customers = [];
         while (reader.Read())
