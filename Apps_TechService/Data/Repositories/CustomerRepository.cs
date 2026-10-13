@@ -1,6 +1,7 @@
 using Apps_TechService.Database;
 using Apps_TechService.Models.Entities;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace Apps_TechService.Data.Repositories;
 
@@ -68,21 +69,48 @@ public sealed class CustomerRepository
     }
 
     /// <summary>
-    /// Obtiene todos los clientes relacionados con individuals.
+    /// Obtiene una página de clientes y el total que coincide con los filtros.
     /// </summary>
-    public IReadOnlyList<Customer> GetAll(bool disabledOnly)
+    public IReadOnlyList<Customer> Search(
+        bool disabledOnly,
+        string? nationalId,
+        string? name,
+        int pageNumber,
+        int pageSize,
+        out int totalCount)
     {
         using NpgsqlConnection connection = _connectionFactory.OpenConnection();
+        const string countSql = """
+            SELECT COUNT(*)
+            FROM customers c
+            INNER JOIN individuals i ON i.individual_id = c.individual_id
+            WHERE c.is_active = @is_active
+              AND (@national_id IS NULL OR i.identification_number = @national_id)
+              AND (@name IS NULL OR i.first_name ILIKE @name_pattern
+                   OR i.last_name ILIKE @name_pattern
+                   OR CONCAT(i.first_name, ' ', i.last_name) ILIKE @name_pattern);
+            """;
+        using NpgsqlCommand countCommand = new(countSql, connection);
+        AddSearchParameters(countCommand, disabledOnly, nationalId, name);
+        totalCount = Convert.ToInt32(countCommand.ExecuteScalar());
+
         const string sql = """
             SELECT c.customer_id, i.individual_id, i.identification_number,
                    i.first_name, i.last_name, i.phone, i.email, c.address, c.is_active
             FROM customers c
             INNER JOIN individuals i ON i.individual_id = c.individual_id
             WHERE c.is_active = @is_active
-            ORDER BY i.last_name, i.first_name;
+              AND (@national_id IS NULL OR i.identification_number = @national_id)
+              AND (@name IS NULL OR i.first_name ILIKE @name_pattern
+                   OR i.last_name ILIKE @name_pattern
+                   OR CONCAT(i.first_name, ' ', i.last_name) ILIKE @name_pattern)
+            ORDER BY i.last_name, i.first_name
+            LIMIT @page_size OFFSET @offset;
             """;
         using NpgsqlCommand command = new(sql, connection);
-        command.Parameters.AddWithValue("is_active", !disabledOnly);
+        AddSearchParameters(command, disabledOnly, nationalId, name);
+        command.Parameters.AddWithValue("page_size", pageSize);
+        command.Parameters.AddWithValue("offset", (pageNumber - 1) * pageSize);
         using NpgsqlDataReader reader = command.ExecuteReader();
         List<Customer> customers = [];
         while (reader.Read())
@@ -91,6 +119,25 @@ public sealed class CustomerRepository
         }
 
         return customers;
+    }
+
+    private static void AddSearchParameters(
+        NpgsqlCommand command,
+        bool disabledOnly,
+        string? nationalId,
+        string? name)
+    {
+        command.Parameters.AddWithValue("is_active", !disabledOnly);
+        NpgsqlParameter nationalIdParameter = command.Parameters.Add("national_id", NpgsqlDbType.Varchar);
+        nationalIdParameter.Value = string.IsNullOrWhiteSpace(nationalId)
+            ? DBNull.Value
+            : nationalId.Trim();
+        NpgsqlParameter nameParameter = command.Parameters.Add("name", NpgsqlDbType.Varchar);
+        nameParameter.Value = string.IsNullOrWhiteSpace(name) ? DBNull.Value : name.Trim();
+        NpgsqlParameter namePatternParameter = command.Parameters.Add("name_pattern", NpgsqlDbType.Varchar);
+        namePatternParameter.Value = string.IsNullOrWhiteSpace(name)
+            ? DBNull.Value
+            : $"%{name.Trim()}%";
     }
 
     /// <summary>

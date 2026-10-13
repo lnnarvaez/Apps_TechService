@@ -7,8 +7,10 @@ namespace Apps_TechService.UI
 {
     public partial class ListcustomersForm : Form
     {
+        private const int PageSize = 10;
         private readonly CustomerService _customerService;
-        private IReadOnlyList<Customer> _loadedCustomers = [];
+        private int _currentPage = 1;
+        private int _totalCustomers;
 
         public ListcustomersForm()
         {
@@ -21,20 +23,36 @@ namespace Apps_TechService.UI
             chkDisabled.CheckedChanged += ChkDisabled_CheckedChanged;
             ibtnChevronLeft.Click += IbtnChevronLeft_Click;
             ibtnSearchName.Click += IbtnSearchName_Click;
+            ibtnChevronContinue.Click += IbtnChevronContinue_Click;
+            ibtnChevronEnd.Click += IbtnChevronEnd_Click;
+            button2.Click += (sender, e) => LoadPage(1);
+            button3.Click += (sender, e) => LoadPage(2);
+            button4.Click += (sender, e) => LoadPage(3);
+            button5.Click += (sender, e) => LoadPage(4);
             Load += ListcustomersForm_Load;
         }
 
         private void ListcustomersForm_Load(object? sender, EventArgs e)
         {
-            LoadCustomers();
+            LoadPage(1);
         }
 
-        private void LoadCustomers()
+        private void LoadPage(int pageNumber)
         {
             try
             {
-                _loadedCustomers = _customerService.GetAll(chkDisabled.Checked);
-                ShowCustomers(_loadedCustomers);
+                string? nationalId = GetNationalIdFilter();
+                string? name = GetNameFilter();
+                IReadOnlyList<Customer> customers = _customerService.Search(
+                    chkDisabled.Checked,
+                    nationalId,
+                    name,
+                    pageNumber,
+                    PageSize,
+                    out _totalCustomers);
+
+                _currentPage = pageNumber;
+                ShowCustomers(customers);
             }
             catch (Exception exception)
             {
@@ -46,15 +64,12 @@ namespace Apps_TechService.UI
             }
         }
 
-        private void ShowCustomers(IEnumerable<Customer> customers)
+        private void ShowCustomers(IReadOnlyList<Customer> customers)
         {
-            List<Customer> filteredCustomers = customers.ToList();
             dataGridCustomer.Rows.Clear();
 
-            int visibleCustomers = Math.Min(filteredCustomers.Count, 10);
-            for (int index = 0; index < visibleCustomers; index++)
+            foreach (Customer customer in customers)
             {
-                Customer customer = filteredCustomers[index];
                 dataGridCustomer.Rows.Add(
                     customer.FullName,
                     customer.Email,
@@ -63,9 +78,12 @@ namespace Apps_TechService.UI
                     "Editar");
             }
 
-            int firstRecord = filteredCustomers.Count == 0 ? 0 : 1;
+            int firstRecord = _totalCustomers == 0 ? 0 : ((_currentPage - 1) * PageSize) + 1;
+            int lastRecord = _totalCustomers == 0
+                ? 0
+                : firstRecord + customers.Count - 1;
             lblCountMessage.Text =
-                $"Mostrando {firstRecord} al {visibleCustomers} de {filteredCustomers.Count} clientes";
+                $"Mostrando {firstRecord} al {lastRecord} de {_totalCustomers} clientes";
         }
 
         private void ConfigureCustomerGrid()
@@ -112,37 +130,51 @@ namespace Apps_TechService.UI
 
         private void ChkDisabled_CheckedChanged(object? sender, EventArgs e)
         {
-            LoadCustomers();
+            LoadPage(1);
         }
 
         private void IbtnChevronLeft_Click(object? sender, EventArgs e)
         {
-            string nationalId = mskNationalId.Text.Trim();
-            if (string.IsNullOrWhiteSpace(nationalId))
-            {
-                ShowCustomers(_loadedCustomers);
-                return;
-            }
-
-            IEnumerable<Customer> customers = _loadedCustomers.Where(customer =>
-                customer.NationalID.Equals(nationalId, StringComparison.OrdinalIgnoreCase));
-            ShowCustomers(customers);
+            LoadPage(1);
         }
 
         private void IbtnSearchName_Click(object? sender, EventArgs e)
         {
-            string searchText = txtSearchName.Text.Trim();
-            if (string.IsNullOrWhiteSpace(searchText))
+            LoadPage(1);
+        }
+
+        private string? GetNationalIdFilter()
+        {
+            if (!mskNationalId.MaskCompleted)
             {
-                ShowCustomers(_loadedCustomers);
-                return;
+                return null;
             }
 
-            IEnumerable<Customer> customers = _loadedCustomers.Where(customer =>
-                customer.FirstName.Contains(searchText, StringComparison.OrdinalIgnoreCase)
-                || customer.LastName.Contains(searchText, StringComparison.OrdinalIgnoreCase)
-                || customer.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase));
-            ShowCustomers(customers);
+            return mskNationalId.Text.Trim();
+        }
+
+        private string? GetNameFilter()
+        {
+            string value = txtSearchName.Text.Trim();
+            return string.IsNullOrWhiteSpace(value) ? null : value;
+        }
+
+        private void IbtnChevronContinue_Click(object? sender, EventArgs e)
+        {
+            if (_currentPage < GetPageCount())
+            {
+                LoadPage(_currentPage + 1);
+            }
+        }
+
+        private void IbtnChevronEnd_Click(object? sender, EventArgs e)
+        {
+            LoadPage(GetPageCount());
+        }
+
+        private int GetPageCount()
+        {
+            return Math.Max(1, (int)Math.Ceiling((double)_totalCustomers / PageSize));
         }
 
         private void BtnNewCustomer_Click(object? sender, EventArgs e)

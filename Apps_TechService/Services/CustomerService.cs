@@ -32,10 +32,34 @@ public sealed class CustomerService
     }
 
     /// <summary>
-    /// Obtiene todos los clientes para la lista.
+    /// Busca clientes aplicando estado, filtros y paginación.
     /// </summary>
-    public IReadOnlyList<Customer> GetAll(bool disabledOnly)
-        => _customerRepository.GetAll(disabledOnly);
+    public IReadOnlyList<Customer> Search(
+        bool disabledOnly,
+        string? nationalId,
+        string? name,
+        int pageNumber,
+        int pageSize,
+        out int totalCount)
+    {
+        if (pageNumber <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pageNumber));
+        }
+
+        if (pageSize <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pageSize));
+        }
+
+        return _customerRepository.Search(
+            disabledOnly,
+            nationalId,
+            name,
+            pageNumber,
+            pageSize,
+            out totalCount);
+    }
 
     /// <summary>
     /// Valida y actualiza un cliente.
