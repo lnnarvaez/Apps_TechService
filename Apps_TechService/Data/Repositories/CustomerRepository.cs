@@ -86,9 +86,15 @@ public sealed class CustomerRepository
             INNER JOIN individuals i ON i.individual_id = c.individual_id
             WHERE c.is_active = @is_active
               AND (@national_id IS NULL OR i.identification_number = @national_id)
-              AND (@name IS NULL OR i.first_name ILIKE @name_pattern
-                   OR i.last_name ILIKE @name_pattern
-                   OR CONCAT(i.first_name, ' ', i.last_name) ILIKE @name_pattern);
+              AND (
+                    @name IS NULL
+                    OR NOT EXISTS (
+                        SELECT 1
+                        FROM unnest(string_to_array(regexp_replace(trim(@name), '\s+', ' ', 'g'), ' ')) AS term
+                        WHERE i.first_name NOT ILIKE '%' || term || '%'
+                          AND i.last_name NOT ILIKE '%' || term || '%'
+                    )
+              );
             """;
         using NpgsqlCommand countCommand = new(countSql, connection);
         AddSearchParameters(countCommand, disabledOnly, nationalId, name);
@@ -101,9 +107,15 @@ public sealed class CustomerRepository
             INNER JOIN individuals i ON i.individual_id = c.individual_id
             WHERE c.is_active = @is_active
               AND (@national_id IS NULL OR i.identification_number = @national_id)
-              AND (@name IS NULL OR i.first_name ILIKE @name_pattern
-                   OR i.last_name ILIKE @name_pattern
-                   OR CONCAT(i.first_name, ' ', i.last_name) ILIKE @name_pattern)
+              AND (
+                    @name IS NULL
+                    OR NOT EXISTS (
+                        SELECT 1
+                        FROM unnest(string_to_array(regexp_replace(trim(@name), '\s+', ' ', 'g'), ' ')) AS term
+                        WHERE i.first_name NOT ILIKE '%' || term || '%'
+                          AND i.last_name NOT ILIKE '%' || term || '%'
+                    )
+              )
             ORDER BY i.last_name, i.first_name
             LIMIT @page_size OFFSET @offset;
             """;
@@ -134,10 +146,6 @@ public sealed class CustomerRepository
             : nationalId.Trim();
         NpgsqlParameter nameParameter = command.Parameters.Add("name", NpgsqlDbType.Varchar);
         nameParameter.Value = string.IsNullOrWhiteSpace(name) ? DBNull.Value : name.Trim();
-        NpgsqlParameter namePatternParameter = command.Parameters.Add("name_pattern", NpgsqlDbType.Varchar);
-        namePatternParameter.Value = string.IsNullOrWhiteSpace(name)
-            ? DBNull.Value
-            : $"%{name.Trim()}%";
     }
 
     /// <summary>

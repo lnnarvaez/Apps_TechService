@@ -17,6 +17,7 @@
 - `Models/Enums/` contiene enums reutilizables; no los declares dentro de formularios.
 - `Database/PostgresConnection.cs` abre conexiones manuales; `Data/Repositories/` ejecuta SQL parametrizado y `Services/` concentra validaciones y reglas de negocio.
 - `MainContainerForm` carga `NewCustomerForm` dentro de `splitContainer1.Panel2` al pulsar `mnuCustomers`.
+- `mnuCustomers` carga `ListcustomersForm`; `ListcustomersForm` abre `NewCustomerForm` desde `BtnNewCustomer`.
 - No implementes MVP, presenters ni vistas adicionales: los eventos deben manejarse directamente en los formularios.
 - Este es un proyecto demostrativo; evita patrones, abstracciones o dependencias nuevas sin una necesidad concreta.
 - El rol permanente es desarrollar con criterio senior y enfoque orientado a objetos, manteniendo una curva de aprendizaje adecuada para un desarrollador junior.
@@ -27,6 +28,8 @@
 - `PostgresConnection` lee `ConnectionStrings:TechService` desde `Apps_TechService/appsettings.json`, que el proyecto copia a la salida.
 - PostgreSQL debe estar iniciado y el esquema aplicado antes de ejecutar la aplicación.
 - La persistencia de clientes usa `Customer` de `Models/Entities/`, una transacción para `individuals` y `customers`, SQL parametrizado, `using` y borrado lógico.
+- El listado de clientes filtra, cuenta y pagina en PostgreSQL; devuelve solo 10 filas por página mediante `LIMIT`/`OFFSET` y no carga todos los clientes en memoria.
+- Los filtros vacíos del listado deben enviarse como `NULL`; no uses texto de máscara de `mskNationalId` como cédula durante la carga inicial.
 - Antes de crear CRUD, contrasta tablas, columnas, claves foráneas e índices con `techservice_v2.sql`; los repositorios deben operar sobre entidades autorizadas.
 - `individuals` es la supertabla de personas; `customers` y `technicians` son especializaciones. `system_accounts` y `account_roles` son seguridad separada.
 - `appsettings.json` usa actualmente la base `techservice`; no asumas que coincide con `techservice_dev` de `techservice_v2.sql`.

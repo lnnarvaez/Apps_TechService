@@ -11,6 +11,8 @@ namespace Apps_TechService.UI
         private readonly CustomerService _customerService;
         private int _currentPage = 1;
         private int _totalCustomers;
+        private string? _activeNationalId;
+        private string? _activeName;
 
         public ListcustomersForm()
         {
@@ -22,6 +24,7 @@ namespace Apps_TechService.UI
             BtnNewCustomer.Click += BtnNewCustomer_Click;
             chkDisabled.CheckedChanged += ChkDisabled_CheckedChanged;
             ibtnChevronLeft.Click += IbtnChevronLeft_Click;
+            ibtnSearchNationalId.Click += IbtnSearchNationalId_Click;
             ibtnSearchName.Click += IbtnSearchName_Click;
             ibtnChevronContinue.Click += IbtnChevronContinue_Click;
             ibtnChevronEnd.Click += IbtnChevronEnd_Click;
@@ -37,22 +40,21 @@ namespace Apps_TechService.UI
             LoadPage(1);
         }
 
-        private void LoadPage(int pageNumber)
+        private bool LoadPage(int pageNumber)
         {
             try
             {
-                string? nationalId = GetNationalIdFilter();
-                string? name = GetNameFilter();
                 IReadOnlyList<Customer> customers = _customerService.Search(
                     chkDisabled.Checked,
-                    nationalId,
-                    name,
+                    _activeNationalId,
+                    _activeName,
                     pageNumber,
                     PageSize,
                     out _totalCustomers);
 
                 _currentPage = pageNumber;
                 ShowCustomers(customers);
+                return customers.Count > 0;
             }
             catch (Exception exception)
             {
@@ -61,6 +63,7 @@ namespace Apps_TechService.UI
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                return false;
             }
         }
 
@@ -130,6 +133,7 @@ namespace Apps_TechService.UI
 
         private void ChkDisabled_CheckedChanged(object? sender, EventArgs e)
         {
+            ClearActiveFilters();
             LoadPage(1);
         }
 
@@ -138,13 +142,64 @@ namespace Apps_TechService.UI
             LoadPage(1);
         }
 
+        /// <summary>
+        /// Reinicia el listado aplicando la cédula completa como filtro.
+        /// </summary>
+        private void IbtnSearchNationalId_Click(object? sender, EventArgs e)
+        {
+            _activeNationalId = GetNationalIdFilter();
+            _activeName = null;
+            if (LoadPage(1))
+            {
+                ResetSearchFields();
+                return;
+            }
+
+            ShowSearchNotFoundMessage("cédula");
+        }
+
+        /// <summary>
+        /// Reinicia el listado aplicando coincidencias de nombre o apellido.
+        /// </summary>
         private void IbtnSearchName_Click(object? sender, EventArgs e)
         {
-            LoadPage(1);
+            _activeNationalId = null;
+            _activeName = GetNameFilter();
+            if (LoadPage(1))
+            {
+                ResetSearchFields();
+                return;
+            }
+
+            ShowSearchNotFoundMessage("nombre o apellido");
+        }
+
+        private void ResetSearchFields()
+        {
+            mskNationalId.Clear();
+            txtSearchName.Clear();
+        }
+
+        private void ClearActiveFilters()
+        {
+            _activeNationalId = null;
+            _activeName = null;
+            ResetSearchFields();
+        }
+
+        private static void ShowSearchNotFoundMessage(string filterName)
+        {
+            MessageBox.Show(
+                $"No se encontraron clientes por {filterName}. Verifique el texto ingresado, " +
+                "revise los espacios y confirme el estado seleccionado en el filtro de inactivos.",
+                "Cliente no encontrado",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private string? GetNationalIdFilter()
         {
+            // Evita enviar la máscara incompleta como si fuera una cédula real.
             if (!mskNationalId.MaskCompleted)
             {
                 return null;
@@ -196,8 +251,6 @@ namespace Apps_TechService.UI
             newCustomerForm.Show();
         }
 
-        private void label3_Click(object? sender, EventArgs e)
-        {
-        }
+        
     }
 }
