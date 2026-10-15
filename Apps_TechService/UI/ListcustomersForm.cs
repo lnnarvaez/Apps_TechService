@@ -21,6 +21,9 @@ namespace Apps_TechService.UI
                 new CustomerRepository(new PostgresConnection()));
 
             ConfigureCustomerGrid();
+            dataGridCustomer.CurrentCellDirtyStateChanged += DataGridCustomer_CurrentCellDirtyStateChanged;
+            dataGridCustomer.CellValueChanged += DataGridCustomer_CellValueChanged;
+            dataGridCustomer.CellClick += DataGridCustomer_CellClick;
             BtnNewCustomer.Click += BtnNewCustomer_Click;
             chkDisabled.CheckedChanged += ChkDisabled_CheckedChanged;
             ibtnChevronLeft.Click += IbtnChevronLeft_Click;
@@ -73,12 +76,15 @@ namespace Apps_TechService.UI
 
             foreach (Customer customer in customers)
             {
-                dataGridCustomer.Rows.Add(
+                int rowIndex = dataGridCustomer.Rows.Add(
                     customer.FullName,
                     customer.Email,
                     customer.Phone ?? string.Empty,
                     customer.IsActive ? "Activo" : "Inactivo",
-                    "Editar");
+                    "Editar",
+                    false);
+                dataGridCustomer.Rows[rowIndex].Tag = customer.CustomerId;
+                dataGridCustomer.Rows[rowIndex].Cells["DeleteColumn"].ReadOnly = !customer.IsActive;
             }
 
             int firstRecord = _totalCustomers == 0 ? 0 : ((_currentPage - 1) * PageSize) + 1;
@@ -93,7 +99,7 @@ namespace Apps_TechService.UI
         {
             dataGridCustomer.AutoGenerateColumns = false;
             dataGridCustomer.Columns.Clear();
-            dataGridCustomer.ReadOnly = true;
+            dataGridCustomer.ReadOnly = false;
             dataGridCustomer.AllowUserToAddRows = false;
             dataGridCustomer.AllowUserToDeleteRows = false;
             dataGridCustomer.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -103,32 +109,136 @@ namespace Apps_TechService.UI
             {
                 Name = "CustomerColumn",
                 HeaderText = "Cliente",
+                ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
             dataGridCustomer.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "EmailColumn",
                 HeaderText = "Correo Electronico",
+                ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
             dataGridCustomer.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "PhoneColumn",
                 HeaderText = "Teléfono",
+                ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
             dataGridCustomer.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "StatusColumn",
                 HeaderText = "Estado",
+                ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
             dataGridCustomer.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "EditColumn",
                 HeaderText = "Editar",
+                ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
+            dataGridCustomer.Columns.Add(new DataGridViewCheckBoxColumn
+            {
+                Name = "DeleteColumn",
+                HeaderText = "Eliminar",
+                ReadOnly = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+        }
+
+        private void DataGridCustomer_CurrentCellDirtyStateChanged(object? sender, EventArgs e)
+        {
+            if (dataGridCustomer.IsCurrentCellDirty
+                && dataGridCustomer.CurrentCell is DataGridViewCheckBoxCell)
+            {
+                dataGridCustomer.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void DataGridCustomer_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0
+                || dataGridCustomer.Columns[e.ColumnIndex].Name != "DeleteColumn"
+                || dataGridCustomer.Rows[e.RowIndex].Cells[e.ColumnIndex].Value is not true)
+            {
+                return;
+            }
+
+            if (dataGridCustomer.Rows[e.RowIndex].Tag is not long customerId)
+            {
+                return;
+            }
+
+            DialogResult result = MessageBox.Show(
+                "El cliente se marcará como inactivo y dejará de aparecer en el listado activo. ¿Desea continuar?",
+                "Confirmar baja lógica",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes)
+            {
+                dataGridCustomer.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+                return;
+            }
+
+            if (!_customerService.Deactivate(customerId))
+            {
+                MessageBox.Show(
+                    "No se encontró el cliente para realizar la baja.",
+                    "Operación no realizada",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                dataGridCustomer.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+                return;
+            }
+
+            LoadPage(_currentPage);
+        }
+
+        private void DataGridCustomer_CellClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0
+                || dataGridCustomer.Columns[e.ColumnIndex].Name != "EditColumn"
+                || dataGridCustomer.Rows[e.RowIndex].Tag is not long customerId)
+            {
+                return;
+            }
+
+            Customer? customer = _customerService.GetById(customerId);
+            if (customer is null)
+            {
+                MessageBox.Show(
+                    "No se encontró el cliente seleccionado.",
+                    "Cliente no disponible",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                LoadPage(_currentPage);
+                return;
+            }
+
+            ShowEditCustomerForm(customer);
+        }
+
+        private void ShowEditCustomerForm(Customer customer)
+        {
+            if (Parent is not Control host)
+            {
+                return;
+            }
+
+            EditCustomerForm editCustomerForm = new(_customerService, customer)
+            {
+                TopLevel = false,
+                FormBorderStyle = FormBorderStyle.None,
+                Dock = DockStyle.Fill
+            };
+
+            host.Controls.Clear();
+            host.Controls.Add(editCustomerForm);
+            editCustomerForm.Show();
         }
 
         private void ChkDisabled_CheckedChanged(object? sender, EventArgs e)
